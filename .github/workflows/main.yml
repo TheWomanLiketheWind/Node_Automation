@@ -1,0 +1,26 @@
+name: Publish And Deploy Demo
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    # 部署到服务器
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        port: ${{ secrets.PORT }}
+        debug: true
+        script: |
+          cd /tmp
+          rm -rf /tmp/Node_Automation
+          git clone https://github.com/TheWomanLiketheWind/Node_Automation
+          cd /tmp/Node_Automation
+          chmod +x ./deploy.sh
+          ./deploy.sh
